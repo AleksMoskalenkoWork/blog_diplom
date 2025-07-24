@@ -1,51 +1,105 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const config = require('config');
-const User = require('../schema/user');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const User = require("../schema/user");
+const config = require("config");
 
 module.exports = function () {
-  router.post('/signin', async (req, res) => {
-    const { username, email, password } = req.body;
-    const existingUser = await User.findOne({ email });
+  router.get("/login", (req, res) => {
+    res.render("login");
+  });
 
-    if (existingUser) {
-      return res.json({ error: 'Емейл вже зареєстровано' });
-    }
+  router.get("/signin", (req, res) => {
+    res.render("signin");
+  });
 
-    const hashPassword = await bcrypt.hash(password, 10);
-    await User.insertOne({
-      username,
-      email,
-      password: hashPassword,
+  router.get("/logout", (req, res) => {
+    req.session.destroy(() => {
+      res.redirect("/login");
     });
-    return res.json({ message: 'Ви зареєстровані в системі!' });
   });
 
-  router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+  router.get("/forgot-password", (req, res) => {
+    res.render("forgot-password");
+  });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
-      return res.json({ token });
-      return res.json({ message: 'Логін виконано успішно' });
+  router.get("/reset-password/:token", async (req, res) => {
+    const { token } = req.params;
+    const user = await User.findOne({
+      resetToken: token,
+      resetExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.render("reset-password", {
+        error: "Недійсне або прострочене посилання",
+      });
+    }
+
+    res.render("reset-password", { token });
+  });
+  // api
+  router.post("/signin", async (req, res) => {
+    try {
+      const { username, email, password } = req.body;
+      const existingUser = await User.findOne({ email });
+
+      if (existingUser) {
+        return res.render("signin", { error: "Емейл вже зареєстровано" });
+      }
+
+      const hashPassword = await bcrypt.hash(password, 10);
+      await User.insertOne({
+        username,
+        email,
+        password: hashPassword,
+      });
+      req.session.user = username;
+      req.session.email = email;
+      res.redirect("/dashboard");
+    } catch (error) {
+      res.status(500).send("Server error");
     }
   });
 
-  router.post('/forgot-password', async (req, res) => {
+  router.post("/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
+
+      if (
+        user &&
+        (await bcrypt.compare(password, user.password)) &&
+        !user.isAdmin
+      ) {
+        req.session.user = user.username;
+        req.session.email = user.email;
+        return res.redirect("/");
+      } else {
+        req.session.user = user.username;
+        req.session.email = user.email;
+        res.redirect("/dashboard");
+      }
+
+      res.status(401).json({ message: "Невірний логін або пароль" });
+    } catch (error) {
+      res.status(500).send("Server error");
+    }
+  });
+
+  router.post("/forgot-password", async (req, res) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
 
     if (!user) {
       return res.json({
-        error: 'Користувача з таким email не знайдено',
+        error: "Користувача з таким email не знайдено",
       });
     }
 
-    const token = crypto.randomBytes(32).toString('hex');
+    const token = crypto.randomBytes(32).toString("hex");
     const expires = Date.now() + 1000 * 60 * 30;
 
     await User.updateOne(
@@ -53,14 +107,16 @@ module.exports = function () {
       { $set: { resetToken: token, resetExpires: expires } }
     );
 
-    // const resetLink = `http://localhost:${config.port}/reset-password/${token}`;
+    const resetLink = `http://localhost:${config.port}/reset-password/${token}`;
 
-    //   console.log('Відновлення пароля:', resetLink);
+    console.log("Відновлення пароля:", resetLink);
 
-    res.json({ token });
+    res.render("forgot-password", {
+      message: "Посилання для відновлення надіслано",
+    });
   });
 
-  router.post('/reset-password/:token', async (req, res) => {
+  router.post("/reset-password/:token", async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
 
@@ -71,7 +127,7 @@ module.exports = function () {
 
     if (!user) {
       return res.json({
-        error: 'Недійсне або прострочене посилання',
+        error: "Недійсне або прострочене посилання",
       });
     }
 
@@ -81,9 +137,11 @@ module.exports = function () {
       { _id: user._id },
       {
         $set: { password: hashedPassword },
-        $unset: { resetToken: '', resetExpires: '' },
+        $unset: { resetToken: "", resetExpires: "" },
       }
     );
+
+    res.redirect("/login");
   });
 
   return router;

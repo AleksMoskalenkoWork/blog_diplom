@@ -1,11 +1,10 @@
 const config = require('config');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-const { mongoUrl } = require('./db');
 
 module.exports = session({
   store: MongoStore.create({
-    mongoUrl,
+    mongoUrl:config.mongoUrl,
     collectionName: config.dbSessionCollectionName,
     ttl: 60 * 60,
   }),
