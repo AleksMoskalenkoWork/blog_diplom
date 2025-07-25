@@ -1,0 +1,23 @@
+include header
+
+.container
+    
+    h1 Статті
+    div
+        a(href="/articles/new") Створити
+    hr
+    div
+        each article in articles
+            div
+                if article.tags
+                    if article.tags.length
+                        div
+                            each tag in article.tags
+                                span.tag= tag
+                div
+                    a(href=`/articles/${article.url}`)= article.title
+                div
+                    a(href=`/articles/${article.url}/edit`) Edit
+                div
+                    form(method="POST", action=`/articles/${article.url}/delete`, style="display:inline")
+                        button(type="submit") Delete 

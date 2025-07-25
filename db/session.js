@@ -4,7 +4,7 @@ const MongoStore = require('connect-mongo');
 
 module.exports = session({
   store: MongoStore.create({
-    mongoUrl:config.mongoUrl,
+    mongoUrl: config.mongoUrl,
     collectionName: config.dbSessionCollectionName,
     ttl: 60 * 60,
   }),

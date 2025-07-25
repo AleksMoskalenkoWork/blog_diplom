@@ -32,6 +32,7 @@ connectDB().then(() => {
   app.use('/', require('./routes/auth')());
   app.use('/', require('./routes/home')());
   app.use('/', require('./routes/dashboard')());
+  app.use('/articles', require('./routes/articles')());
 
   app.listen(config.port, () => {
     console.log('Сервер запущено на http://localhost:' + config.port);
