@@ -93,7 +93,6 @@ module.exports = function () {
       const email = he.encode(req.body.email.trim().toLowerCase());
       const password = he.encode(req.body.password.trim());
       const user = await User.findOne({ email });
-      console.log('user:', user);
 
       if (user && (await bcrypt.compare(password, user.password))) {
         req.session.username = user.username;
