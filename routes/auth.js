@@ -80,7 +80,9 @@ module.exports = function () {
       });
       req.session.user = username;
       req.session.email = email;
-      res.redirect('/dashboard');
+      req.session.isAdmin = user.isAdmin;
+
+      res.redirect('/home');
     } catch (error) {
       res.status(500).send('Server error');
     }
@@ -91,22 +93,21 @@ module.exports = function () {
       const email = he.encode(req.body.email.trim().toLowerCase());
       const password = he.encode(req.body.password.trim());
       const user = await User.findOne({ email });
+      console.log('user:', user);
 
-      if (
-        user &&
-        (await bcrypt.compare(password, user.password)) &&
-        !user.isAdmin
-      ) {
-        req.session.user = user.username;
+      if (user && (await bcrypt.compare(password, user.password))) {
+        req.session.username = user.username;
         req.session.email = user.email;
-        return res.redirect('/');
-      } else {
-        req.session.user = user.username;
-        req.session.email = user.email;
-        res.redirect('/dashboard');
+        req.session.isAdmin = user.isAdmin;
+
+        if (!user.isAdmin) {
+          return res.redirect('/dashboard');
+        } else {
+          return res.redirect('/');
+        }
       }
 
-      res.status(401).json({ message: 'Невірний логін або пароль' });
+      res.render('login', { error: 'Невірний логін або пароль' });
     } catch (error) {
       res.status(500).send('Server error');
     }

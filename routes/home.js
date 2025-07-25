@@ -6,7 +6,7 @@ module.exports = function () {
     // const articles = await articlesCollection
     //   .find({ published: true })
     //   .toArray();
-    res.render('main');
+    res.render('home');
   });
 
   // router.get("/article/:url", async (req, res) => {

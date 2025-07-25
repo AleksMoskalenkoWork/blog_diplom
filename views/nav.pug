@@ -1,18 +1,57 @@
 nav
     ul(style="display:flex; justify-content: space-between; list-style-type:none")
-        li
-            a(href="/") Main
-        li
-            a(href="/articles") Articles
-        li
-            a(href="/dashboard") Dashboard
-        li
-            if (user)
-                a(href="/logout") Logout
-            else
+        if(!username)
+            li
+                a(href="/") Home
+            li
                 a(href="/login") Login
-        li
-            if (!user)
+            li
                 a(href="/signin") Register
-        if (user)
-            li= email
+        if(!isAdmin && username)
+            li
+                a(href="/") Main
+            li
+                a(href="/articles") Articles
+            li
+                if (username)
+                    a(href="/logout") Logout
+                else
+                    a(href="/login") Login
+            li
+                if (!username)
+                    a(href="/signin") Register
+            if (username)
+                li= email
+        if (isAdmin && username)
+            li
+                a(href="/dashboard") Dashboard
+            li
+                a(href="/articles") Articles
+            li
+                if (username)
+                    a(href="/logout") Logout
+                else
+                    a(href="/login") Login
+            li
+                if (!username)
+                    a(href="/signin") Register
+            if (username)
+                li= email
+        //- li
+        //-     if(isAdmin)
+        //-     a(href="/") Main
+        //- li
+        //-     a(href="/articles") Articles
+        //- li
+        //-     if(!isAdmin)
+        //-         a(href="/dashboard") Dashboard
+        //- li
+        //-     if (username)
+        //-         a(href="/logout") Logout
+        //-     else
+        //-         a(href="/login") Login
+        //- li
+        //-     if (!username)
+        //-         a(href="/signin") Register
+        //- if (username)
+        //-     li= email
