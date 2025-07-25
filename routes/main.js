@@ -1,12 +1,12 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
 module.exports = function () {
-  router.get("/", async (req, res) => {
+  router.get('/', async (req, res) => {
     // const articles = await articlesCollection
     //   .find({ published: true })
     //   .toArray();
-    res.render("main");
+    res.render('main');
   });
 
   // router.get("/article/:url", async (req, res) => {

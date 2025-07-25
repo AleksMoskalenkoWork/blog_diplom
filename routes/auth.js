@@ -1,56 +1,78 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
-const User = require("../schema/user");
-const config = require("config");
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const User = require('../schema/user');
+const config = require('config');
+const he = require('he');
 
 module.exports = function () {
-  router.get("/login", (req, res) => {
-    res.render("login");
-  });
-
-  router.get("/signin", (req, res) => {
-    res.render("signin");
-  });
-
-  router.get("/logout", (req, res) => {
-    req.session.destroy(() => {
-      res.redirect("/login");
-    });
-  });
-
-  router.get("/forgot-password", (req, res) => {
-    res.render("forgot-password");
-  });
-
-  router.get("/reset-password/:token", async (req, res) => {
-    const { token } = req.params;
-    const user = await User.findOne({
-      resetToken: token,
-      resetExpires: { $gt: Date.now() },
-    });
-
-    if (!user) {
-      return res.render("reset-password", {
-        error: "Недійсне або прострочене посилання",
-      });
+  router.get('/login', (req, res) => {
+    try {
+      res.render('login');
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
     }
+  });
 
-    res.render("reset-password", { token });
+  router.get('/signin', (req, res) => {
+    try {
+      res.render('signin');
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  router.get('/logout', (req, res) => {
+    try {
+      req.session.destroy(() => {
+        res.redirect('/login');
+      });
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  router.get('/forgot-password', (req, res) => {
+    try {
+      res.render('forgot-password');
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  router.get('/reset-password/:token', async (req, res) => {
+    try {
+      const { token } = req.params;
+      const user = await User.findOne({
+        resetToken: token,
+        resetExpires: { $gt: Date.now() },
+      });
+
+      if (!user) {
+        return res.render('reset-password', {
+          error: 'Недійсне або прострочене посилання',
+        });
+      }
+
+      res.render('reset-password', { token });
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
   });
   // api
-  router.post("/signin", async (req, res) => {
+  router.post('/signin', async (req, res) => {
     try {
-      const { username, email, password } = req.body;
+      const email = he.encode(req.body.email.trim().toLowerCase());
+      const username = he.encode(req.body.username.trim().toLowerCase());
+
       const existingUser = await User.findOne({ email });
 
       if (existingUser) {
-        return res.render("signin", { error: "Емейл вже зареєстровано" });
+        return res.render('signin', { error: 'Емейл вже зареєстровано' });
       }
 
-      const hashPassword = await bcrypt.hash(password, 10);
+      const hashPassword = await bcrypt.hash(req.body.password.trim(), 10);
       await User.insertOne({
         username,
         email,
@@ -58,15 +80,16 @@ module.exports = function () {
       });
       req.session.user = username;
       req.session.email = email;
-      res.redirect("/dashboard");
+      res.redirect('/dashboard');
     } catch (error) {
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
   });
 
-  router.post("/login", async (req, res) => {
+  router.post('/login', async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const email = he.encode(req.body.email.trim().toLowerCase());
+      const password = he.encode(req.body.password.trim());
       const user = await User.findOne({ email });
 
       if (
@@ -76,30 +99,30 @@ module.exports = function () {
       ) {
         req.session.user = user.username;
         req.session.email = user.email;
-        return res.redirect("/");
+        return res.redirect('/');
       } else {
         req.session.user = user.username;
         req.session.email = user.email;
-        res.redirect("/dashboard");
+        res.redirect('/dashboard');
       }
 
-      res.status(401).json({ message: "Невірний логін або пароль" });
+      res.status(401).json({ message: 'Невірний логін або пароль' });
     } catch (error) {
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
   });
 
-  router.post("/forgot-password", async (req, res) => {
-    const { email } = req.body;
+  router.post('/forgot-password', async (req, res) => {
+    const email = he.encode(req.body.email.trim().toLowerCase());
     const user = await User.findOne({ email });
 
     if (!user) {
       return res.json({
-        error: "Користувача з таким email не знайдено",
+        error: 'Користувача з таким email не знайдено',
       });
     }
 
-    const token = crypto.randomBytes(32).toString("hex");
+    const token = crypto.randomBytes(32).toString('hex');
     const expires = Date.now() + 1000 * 60 * 30;
 
     await User.updateOne(
@@ -109,16 +132,16 @@ module.exports = function () {
 
     const resetLink = `http://localhost:${config.port}/reset-password/${token}`;
 
-    console.log("Відновлення пароля:", resetLink);
+    console.log('Відновлення пароля:', resetLink);
 
-    res.render("forgot-password", {
-      message: "Посилання для відновлення надіслано",
+    res.render('forgot-password', {
+      message: 'Посилання для відновлення надіслано',
     });
   });
 
-  router.post("/reset-password/:token", async (req, res) => {
+  router.post('/reset-password/:token', async (req, res) => {
     const { token } = req.params;
-    const { password } = req.body;
+    const password = he.encode(req.body.password.trim());
 
     const user = await User.findOne({
       resetToken: token,
@@ -127,7 +150,7 @@ module.exports = function () {
 
     if (!user) {
       return res.json({
-        error: "Недійсне або прострочене посилання",
+        error: 'Недійсне або прострочене посилання',
       });
     }
 
@@ -141,7 +164,7 @@ module.exports = function () {
       }
     );
 
-    res.redirect("/login");
+    res.redirect('/login');
   });
 
   return router;
