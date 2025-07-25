@@ -26,7 +26,7 @@ module.exports = function () {
   router.get('/logout', (req, res) => {
     try {
       req.session.destroy(() => {
-        res.redirect('/login');
+        res.redirect('/home');
       });
     } catch (error) {
       res.status(500).send('Internal Server Error');
@@ -66,9 +66,9 @@ module.exports = function () {
       const email = he.encode(req.body.email.trim().toLowerCase());
       const username = he.encode(req.body.username.trim().toLowerCase());
 
-      const existingUser = await User.findOne({ email });
+      const user = await User.findOne({ email });
 
-      if (existingUser) {
+      if (user) {
         return res.render('signin', { error: 'Емейл вже зареєстровано' });
       }
 
@@ -78,11 +78,13 @@ module.exports = function () {
         email,
         password: hashPassword,
       });
-      req.session.user = username;
-      req.session.email = email;
-      req.session.isAdmin = user.isAdmin;
 
-      res.redirect('/home');
+      req.session.username = username;
+      req.session.email = email;
+
+      return res.render('login', {
+        message: 'user created successfully, please login',
+      });
     } catch (error) {
       res.status(500).send('Server error');
     }
@@ -99,11 +101,10 @@ module.exports = function () {
         req.session.email = user.email;
         req.session.isAdmin = user.isAdmin;
 
-        if (!user.isAdmin) {
+        if (user.isAdmin === true) {
           return res.redirect('/dashboard');
-        } else {
-          return res.redirect('/');
         }
+        return res.redirect('/');
       }
 
       res.render('login', { error: 'Невірний логін або пароль' });
