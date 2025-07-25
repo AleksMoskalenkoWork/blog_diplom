@@ -9,12 +9,10 @@ include header
     div
         input(type="text", name="url", placeholder="URL", value=article.url || '')
     div
-        input(type="text", name="tags", placeholder="Tags", value=tags || '')
-    div
-        textarea(name="content")= article.content || ''
+        textarea(name="content" placeholder="Зміст")= article.content || ''
     div
         label
-            input(type="checkbox", name="published", checked=article.published)
-            | Опубліковано
+            input(type="checkbox", name="published", checked= article.published ? 'checked' : '')
+            |   Опублікувати
     div
         button(type="submit") Зберегти

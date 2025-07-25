@@ -1,6 +1,7 @@
 const express = require('express');
 const Article = require('../schema/article');
 const router = express.Router();
+const he = require('he');
 
 module.exports = function () {
   router.get('/', async (req, res) => {
@@ -13,17 +14,14 @@ module.exports = function () {
   });
 
   router.get('/:url', async (req, res) => {
-    const article = await articlesCollection.findOne({ url: req.params.url });
+    const article = await Article.findOne({ url: req.params.url });
     res.render('article', { article });
   });
 
   router.get('/:url/edit', async (req, res) => {
-    const article = await articlesCollection.findOne({ url: req.params.url });
-
-    const tags = article.tags ? article.tags.join(', ') : '';
+    const article = await Article.findOne({ url: req.params.url });
 
     res.render('article-form', {
-      tags,
       article,
       action: `/articles/${article.url}/edit`,
     });
@@ -31,40 +29,32 @@ module.exports = function () {
 
   //api
   router.post('/new', async (req, res) => {
-    const { title, content, url, tags, published } = req.body;
+    const title = he.encode(req.body.title.trim());
+    const url = he.encode(req.body.url.trim());
+    const content = he.encode(req.body.content.trim());
 
-    const articleTemplate = {
+    await Article.insertOne({
       title,
-      content,
       url,
-      published: published === 'on',
-      createdAt: new Date(),
-    };
-
-    if (tags && tags.length > 0) {
-      articleTemplate.tags = tags.split(',').map((tag) => tag.trim());
-    }
-
-    await articlesCollection.insertOne(articleTemplate);
+      content,
+      published: req.body.published === 'on' ? true : false,
+    });
     res.redirect('/articles');
   });
 
   router.post('/:url/edit', async (req, res) => {
-    const { title, content, url, tags, published } = req.body;
+    const title = he.encode(req.body.title.trim());
+    const url = he.encode(req.body.url.trim());
+    const content = he.encode(req.body.content.trim());
 
-    await articlesCollection.updateOne(
+    await Article.findOneAndUpdate(
       { url: req.params.url },
       {
         $set: {
           title,
           content,
           url,
-          tags:
-            tags && tags.length > 0
-              ? tags.split(',').map((tag) => tag.trim())
-              : [],
-          published: published === 'on',
-          updatedAt: new Date(),
+          published: req.body.published === 'on' ? true : false,
         },
       }
     );
@@ -72,7 +62,7 @@ module.exports = function () {
   });
 
   router.post('/:url/delete', async (req, res) => {
-    await articlesCollection.deleteOne({ url: req.params.url });
+    await Article.findOneAndDelete({ url: req.params.url });
     res.redirect('/articles');
   });
 

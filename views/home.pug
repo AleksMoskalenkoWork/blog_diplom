@@ -4,14 +4,14 @@ include header
     
     h1 Home
     p Popular Articles must be here and sumthing else
-    //- each item in articles
-    //-     div
-    //-         if (email)
-    //-             a(href="/edit/") Edit
-    //-     h5
-    //-         a(href=`/articles/${item.url}`)= item.title
+    each item in articles
+        div
+            if (email)
+                a(href="/edit/") Edit
+        h5
+            a(href=`/articles/${item.url}`)= item.title
 
-    //-     div
-    //-         span= item.createdAt
-    //-         | &nbsp;
-    //-         span views: #{item.views}
+        div
+            span= item.createdAt
+            | &nbsp;
+            span views: #{item.views}

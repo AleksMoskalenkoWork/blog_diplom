@@ -12,6 +12,7 @@ const app = express();
 
 app.set('view engine', 'pug');
 app.set('views', './views');
+app.use(express.static(`${__dirname}/assets`));
 app.use(cors());
 app.use(sessionMiddleware);
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,10 +20,6 @@ app.use(
   morgan('tiny', {
     skip: (req) => req.url.startsWith('/.well-known'),
   })
-);
-app.use(
-  '/bootstrap',
-  express.static(__dirname + '/node_modules/bootstrap/dist')
 );
 
 app.use((req, res, next) => {
