@@ -137,7 +137,7 @@ module.exports = function () {
       { _id: user._id },
       {
         $set: { password: hashedPassword },
-        $unset: { resetToken: "", resetExpires: "" },
+        $unset: { resetToken, resetExpires },
       }
     );
 
