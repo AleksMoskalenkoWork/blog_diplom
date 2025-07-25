@@ -26,7 +26,7 @@ module.exports = function () {
   router.get('/logout', (req, res) => {
     try {
       req.session.destroy(() => {
-        res.redirect('/home');
+        res.redirect('/');
       });
     } catch (error) {
       res.status(500).send('Internal Server Error');
