@@ -20,6 +20,10 @@ app.use(
     skip: (req) => req.url.startsWith('/.well-known'),
   })
 );
+app.use(
+  '/bootstrap',
+  express.static(__dirname + '/node_modules/bootstrap/dist')
+);
 
 app.use((req, res, next) => {
   app.locals.username = req.session?.username || null;
