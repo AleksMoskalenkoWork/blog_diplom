@@ -2,7 +2,26 @@ include header
 
 .container
   h1= article.title
-  if article.author
-    p Author: #{article.author.username}
-  p= article.content
-  a(href="/articles") ← Back to list
+  a(href="/home") ← Back to list
+  div 
+    div
+      if article.author
+        p Author: #{article.author.username}
+      else
+        p Unknown author
+      p= article.content
+      hr
+      h2 Коментарі
+      if !comments.length
+          p Коментарів немає
+      else
+          each comment in comments
+              p= comment.author.username
+              p= comment.text
+              hr
+    div
+      form(method="POST", action=`/${article.url}/comments`)
+        div
+          textarea(name="comment", placeholder="Comment")
+        div
+          button(type="submit") Add comment

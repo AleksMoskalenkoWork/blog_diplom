@@ -2,22 +2,16 @@ include header
 
 .container
     
-    h1 Articles
+    h1 My articles
     div
         a(href="/articles/new") Create new article
     hr
     div
         each article in articles
             div
-                if article.tags
-                    if article.tags.length
-                        div
-                            each tag in article.tags
-                                span.tag= tag
-                div
-                    a(href=`/articles/${article.url}`)= article.title
-                div
-                    a(href=`/articles/${article.url}/edit`) Edit
-                div
-                    form(method="POST", action=`/articles/${article.url}/delete`, style="display:inline")
-                        button(type="submit") Delete
+                a(href=`/articles/${article.url}`)= article.title
+            div
+                a(href=`/articles/${article.url}/edit`) Edit
+            div
+                form(method="POST", action=`/articles/${article.url}/delete`, style="display:inline")
+                    button(type="submit") Delete

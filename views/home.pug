@@ -15,4 +15,7 @@ include header
            else
                p Unknown author
         h5
-            a(href=`/articles/${article.url}`)= article.author && article.author.title ? article.author.title : article.title
+            if email
+                a(href=`/articles/${article.url}`)= article.title
+            else
+                a(href=`/login`)= article.title

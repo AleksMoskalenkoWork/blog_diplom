@@ -2,6 +2,7 @@ const express = require('express');
 const Article = require('../schema/article');
 const router = express.Router();
 const he = require('he');
+const Comment = require('../schema/comment');
 
 module.exports = function () {
   router.get('/', async (req, res) => {
@@ -25,9 +26,25 @@ module.exports = function () {
   });
 
   router.get('/:url', async (req, res) => {
+    // const article = await Article.findOne({ url: req.params.url }).populate(
+    //   'author'
+    // );
+
+    // const comments = await Comment.find({ article: article._id }).populate(
+    //   'author'
+    // );
+
+    // res.render('article', { article, comments });
     try {
-      const article = await Article.findOne({ url: req.params.url });
-      res.render('article', { article });
+      const article = await Article.findOne({ url: req.params.url }).populate(
+        'author'
+      );
+
+      const comments = await Comment.find({ article: article._id }).populate(
+        'author'
+      );
+
+      res.render('article', { article, comments });
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }

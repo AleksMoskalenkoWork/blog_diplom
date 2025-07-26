@@ -34,6 +34,7 @@ connectDB().then(() => {
   app.use('/', require('./routes/home')());
   app.use('/', require('./routes/dashboard')());
   app.use('/articles', require('./routes/articles')());
+  app.use('/', require('./routes/comments')());
 
   app.listen(config.port, () => {
     console.log('Server run on http://localhost:' + config.port);
