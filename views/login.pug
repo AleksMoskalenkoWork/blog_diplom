@@ -7,12 +7,12 @@ include header
       p(style="color:red")= error
 
     p 
-      a(href="/forgot-password") Забули пароль?
+      a(href="/forgot-password") Forgot password?
 
     form(method="POST" action="/login")
       div
         input(type="text" name="email" placeholder="Email" required)
       div
-        input(type="password" name="password" placeholder="Пароль" required)
+        input(type="password" name="password" placeholder="Password" required)
       div
-        button(type="submit") Увійти
+        button(type="submit") Login

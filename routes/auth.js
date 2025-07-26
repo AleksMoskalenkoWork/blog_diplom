@@ -51,7 +51,7 @@ module.exports = function () {
 
       if (!user) {
         return res.render('reset-password', {
-          error: 'Недійсне або прострочене посилання',
+          error: 'Invalid or expired link',
         });
       }
 
@@ -69,7 +69,7 @@ module.exports = function () {
       const user = await User.findOne({ email });
 
       if (user) {
-        return res.render('signin', { error: 'Емейл вже зареєстровано' });
+        return res.render('signin', { error: 'Email already registered' });
       }
 
       const hashPassword = await bcrypt.hash(req.body.password.trim(), 10);
@@ -83,10 +83,10 @@ module.exports = function () {
       req.session.email = email;
 
       return res.render('login', {
-        message: 'user created successfully, please login',
+        message: 'User created successfully, please login',
       });
     } catch (error) {
-      res.status(500).send('Server error');
+      res.status(500).send('Internal Server Error');
     }
   });
 
@@ -108,65 +108,73 @@ module.exports = function () {
         return res.redirect('/');
       }
 
-      res.render('login', { error: 'Невірний логін або пароль' });
+      res.render('login', { error: 'Incorrect login or password' });
     } catch (error) {
-      res.status(500).send('Server error');
+      res.status(500).send('Internal Server Error');
     }
   });
 
   router.post('/forgot-password', async (req, res) => {
-    const email = he.encode(req.body.email.trim().toLowerCase());
-    const user = await User.findOne({ email });
+    try {
+      const email = he.encode(req.body.email.trim().toLowerCase());
+      const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.json({
-        error: 'Користувача з таким email не знайдено',
+      if (!user) {
+        return res.json({
+          error: 'No user with this email found',
+        });
+      }
+
+      const token = crypto.randomBytes(32).toString('hex');
+      const expires = Date.now() + 1000 * 60 * 30;
+
+      await User.updateOne(
+        { email },
+        { $set: { resetToken: token, resetExpires: expires } }
+      );
+
+      const resetLink = `http://localhost:${config.port}/reset-password/${token}`;
+
+      console.log('Password recovery:', resetLink);
+
+      res.render('forgot-password', {
+        message: 'Recovery link sent to your email',
       });
+    } catch (error) {
+      return res.status(500).send('Internal Server Error');
     }
-
-    const token = crypto.randomBytes(32).toString('hex');
-    const expires = Date.now() + 1000 * 60 * 30;
-
-    await User.updateOne(
-      { email },
-      { $set: { resetToken: token, resetExpires: expires } }
-    );
-
-    const resetLink = `http://localhost:${config.port}/reset-password/${token}`;
-
-    console.log('Відновлення пароля:', resetLink);
-
-    res.render('forgot-password', {
-      message: 'Посилання для відновлення надіслано',
-    });
   });
 
   router.post('/reset-password/:token', async (req, res) => {
-    const { token } = req.params;
-    const password = he.encode(req.body.password.trim());
+    try {
+      const { token } = req.params;
+      const password = he.encode(req.body.password.trim());
 
-    const user = await User.findOne({
-      resetToken: token,
-      resetExpires: { $gt: Date.now() },
-    });
-
-    if (!user) {
-      return res.json({
-        error: 'Недійсне або прострочене посилання',
+      const user = await User.findOne({
+        resetToken: token,
+        resetExpires: { $gt: Date.now() },
       });
-    }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await User.updateOne(
-      { _id: user._id },
-      {
-        $set: { password: hashedPassword },
-        $unset: { resetToken, resetExpires },
+      if (!user) {
+        return res.json({
+          error: 'Invalid or expired link',
+        });
       }
-    );
 
-    res.redirect('/login');
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      await User.updateOne(
+        { _id: user._id },
+        {
+          $set: { password: hashedPassword },
+          $unset: { resetToken, resetExpires },
+        }
+      );
+
+      res.redirect('/login');
+    } catch (error) {
+      return res.status(500).send('Internal Server Error');
+    }
   });
 
   return router;

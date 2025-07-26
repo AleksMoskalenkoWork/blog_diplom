@@ -2,5 +2,7 @@ include header
 
 .container
   h1= article.title
+  if article.author
+    p Author: #{article.author.username}
   p= article.content
-  a(href="/articles") ← Назад до списку
+  a(href="/articles") ← Back to list

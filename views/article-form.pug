@@ -1,18 +1,18 @@
 include header
 
 .container
-  h1= article._id ? 'Редагувати статтю' : 'Нова стаття'
+  h1= article._id ? 'Edit article' : 'New article'
 
   form(method="POST", action=action)
     div
-        input(type="text", name="title", placeholder="Заголовок", value=article.title || '')
+        input(type="text", name="title", placeholder="Title", value=article.title || '')
     div
         input(type="text", name="url", placeholder="URL", value=article.url || '')
     div
-        textarea(name="content" placeholder="Зміст")= article.content || ''
+        textarea(name="content" placeholder="Content")= article.content || ''
     div
         label
             input(type="checkbox", name="published", checked= article.published ? 'checked' : '')
-            |   Опублікувати
+            |   Public
     div
-        button(type="submit") Зберегти
+        button(type="submit") Save

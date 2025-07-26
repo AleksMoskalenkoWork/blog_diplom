@@ -2,9 +2,9 @@ include header
 
 .container
     
-    h1 Статті
+    h1 Articles
     div
-        a(href="/articles/new") Створити
+        a(href="/articles/new") Create new article
     hr
     div
         each article in articles
@@ -20,4 +20,4 @@ include header
                     a(href=`/articles/${article.url}/edit`) Edit
                 div
                     form(method="POST", action=`/articles/${article.url}/delete`, style="display:inline")
-                        button(type="submit") Delete 
+                        button(type="submit") Delete

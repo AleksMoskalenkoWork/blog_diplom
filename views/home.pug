@@ -7,12 +7,12 @@ include header
     if articles.length === 0
         p No articles found.
     else
-        h2 Popular Articles
+        h2 Popular articles
     each article in articles
         div
            if article.author
-               p Автор: #{article.author.username}
+               p Author: #{article.author.username}
            else
-               p Автор неизвестен
+               p Unknown author
         h5
             a(href=`/articles/${article.url}`)= article.author && article.author.title ? article.author.title : article.title
