@@ -110,7 +110,12 @@ module.exports = function () {
 
   router.post('/:url/delete', async (req, res) => {
     try {
-      await Article.findOneAndDelete({ url: req.params.url });
+      const url = req.params.url;
+      const article = await Article.findOne({ url });
+      if (article) {
+        await Comment.deleteMany({ article: article._id });
+        await Article.deleteOne({ url });
+      }
       res.redirect('/articles');
     } catch (error) {
       res.status(500).send('Internal Server Error');

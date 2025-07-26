@@ -1,13 +1,10 @@
 include header
 
 .container
-    
-    h1 Home
-
     if articles.length === 0
         p No articles found.
     else
-        h2 Popular articles
+        h3 Popular articles
     each article in articles
         div
            if article.author
