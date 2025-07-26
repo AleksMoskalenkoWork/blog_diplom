@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const articleSchema = new mongoose.Schema(
   {
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'users',
+    },
     title: { type: String, maxlength: 100, required: true },
     url: { type: String, maxlength: 20, required: true, unique: true },
     content: { type: String, maxlength: 500 },

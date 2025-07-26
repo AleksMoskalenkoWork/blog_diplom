@@ -3,15 +3,16 @@ include header
 .container
     
     h1 Home
-    p Popular Articles must be here and sumthing else
-    each item in articles
-        div
-            if (email)
-                a(href="/edit/") Edit
-        h5
-            a(href=`/articles/${item.url}`)= item.title
 
+    if articles.length === 0
+        p No articles found.
+    else
+        h2 Popular Articles
+    each article in articles
         div
-            span= item.createdAt
-            | &nbsp;
-            span views: #{item.views}
+           if article.author
+               p Автор: #{article.author.username}
+           else
+               p Автор неизвестен
+        h5
+            a(href=`/articles/${article.url}`)= article.author && article.author.title ? article.author.title : article.title

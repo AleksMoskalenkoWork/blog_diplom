@@ -5,7 +5,8 @@ const he = require('he');
 
 module.exports = function () {
   router.get('/', async (req, res) => {
-    const articles = await Article.find();
+    const userId = req.session.userId;
+    const articles = await Article.find({ author: userId }).populate('author');
     res.render('articles', { articles });
   });
 
@@ -32,8 +33,10 @@ module.exports = function () {
     const title = he.encode(req.body.title.trim());
     const url = he.encode(req.body.url.trim());
     const content = he.encode(req.body.content.trim());
+    const author = req.session.userId;
 
     await Article.insertOne({
+      author,
       title,
       url,
       content,
@@ -46,11 +49,13 @@ module.exports = function () {
     const title = he.encode(req.body.title.trim());
     const url = he.encode(req.body.url.trim());
     const content = he.encode(req.body.content.trim());
+    const author = req.session.userId;
 
     await Article.findOneAndUpdate(
       { url: req.params.url },
       {
         $set: {
+          author,
           title,
           content,
           url,

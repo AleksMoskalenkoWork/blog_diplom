@@ -100,6 +100,7 @@ module.exports = function () {
         req.session.username = user.username;
         req.session.email = user.email;
         req.session.isAdmin = user.isAdmin;
+        req.session.userId = user._id;
 
         if (user.isAdmin === true) {
           return res.redirect('/dashboard');
