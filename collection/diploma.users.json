@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "68876e7c3472ca0802e42713"
+  },
+  "username": "admin",
+  "email": "admin@admin.com",
+  "password": "$2b$10$kdX2XI/BoaQJlzl/wCYlreqUXp2xWoxYgnmITh6D90uKhZcbl0N/S",
+  "isAdmin": true,
+  "resetToken": null,
+  "resetExpires": null,
+  "createdAt": {
+    "$date": "2025-07-28T12:35:08.684Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-28T12:35:08.684Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68876fea3472ca0802e42722"
+  },
+  "username": "user",
+  "email": "user@user.com",
+  "password": "$2b$10$tqRC4ld37v.1RK6/rOGs2Oo6AyK64f814dCLL7aMt4FBG4wWsc6QO",
+  "isAdmin": false,
+  "resetToken": null,
+  "resetExpires": null,
+  "createdAt": {
+    "$date": "2025-07-28T12:41:14.079Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-28T13:34:34.371Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "688770293472ca0802e42728"
+  },
+  "username": "qa",
+  "email": "qa@qa.com",
+  "password": "$2b$10$fDsg1rhMXdmMnMnJFuwSqu3W4ei6dIh6XhFnzT.qR2A4BjJAh5GK2",
+  "isAdmin": false,
+  "resetToken": null,
+  "resetExpires": null,
+  "createdAt": {
+    "$date": "2025-07-28T12:42:17.063Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-28T12:42:17.063Z"
+  },
+  "__v": 0
+}]
