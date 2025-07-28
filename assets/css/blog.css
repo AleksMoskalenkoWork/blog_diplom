@@ -186,7 +186,7 @@ textarea {
   margin-bottom: 14px;
   border: 1px solid #cfd8dc;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 16px;
   background: #f7f9fa;
 }
 
@@ -259,13 +259,3 @@ nav a:hover {
   margin-top: 4px;
   font-size: 16px;
 }
-
-/* Footer
-footer {
-  margin-top: 48px;
-  padding: 16px 0;
-  text-align: center;
-  color: #888;
-  font-size: 0.95rem;
-  border-top: 1px solid #e5e5e5;
-} */

@@ -28,7 +28,7 @@ module.exports = function () {
   router.get('/dashboard/articles', async (req, res) => {
     try {
       const articles = await Article.find();
-      res.render('tab-articles', { articles });
+      res.render('tab-articles', { articles, action: '/update-article' });
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
@@ -36,8 +36,8 @@ module.exports = function () {
 
   router.get('/dashboard/comments', async (req, res) => {
     try {
-      const comments = await Comment.find();
-      res.render('tab-comments', { comments });
+      const comments = await Comment.find().populate('author article');
+      res.render('tab-comments', { comments, action: '/update-comment' });
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
@@ -54,6 +54,40 @@ module.exports = function () {
         }
       );
       res.redirect('/dashboard');
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  router.post('/update-article', async (req, res) => {
+    try {
+      await Article.findOneAndUpdate(
+        { _id: req.body.id },
+        {
+          $set: {
+            published: req.body.published === 'true' ? true : false,
+          },
+        }
+      );
+      res.redirect('/dashboard/articles');
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  router.post('/update-comment', async (req, res) => {
+    console.log('Update Comment:', req.body);
+
+    try {
+      await Comment.findOneAndUpdate(
+        { _id: req.body.id },
+        {
+          $set: {
+            visible: req.body.visible === 'true' ? true : false,
+          },
+        }
+      );
+      res.redirect('/dashboard/comments');
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }

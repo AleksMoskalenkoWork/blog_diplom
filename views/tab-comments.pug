@@ -8,9 +8,21 @@ div.dashboard_content
             th Article Title
             th Comment
             th User
+            th Status
             each item, index in comments
                 tr
-                    td #{index + 1}
-                    td= item.articleTitle
-                    td= item.commentText
-                    td= item.username
+                td #{index + 1}
+                td= item.article.title
+                td= item.text
+                td= item.author.username
+                td
+                    if item.visible
+                        form(method="POST", action=action)
+                            input(type="hidden", name="id", value=item._id)
+                            input(type="hidden", name="visible", value= item.visible ? '' : 'true')
+                            button(type="submit")= item.visible? 'Visible' : 'Hidden'
+                    else
+                        form(method="POST", action=action)
+                            input(type="hidden", name="id", value=item._id)
+                            input(type="hidden", name="visible", value= item.visible ? '' : 'true')
+                            button(type="submit")= item.visible? 'Visible' : 'Hidden'

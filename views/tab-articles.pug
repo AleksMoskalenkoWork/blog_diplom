@@ -19,10 +19,10 @@ div.dashboard_content
                     if item.published
                         form(method="POST", action=action)
                             input(type="hidden", name="id", value=item._id)
-                            input(type="hidden", name="published", value='false')
+                            input(type="hidden", name="published", value= item.published ? '' : 'true')
                             button(type="submit") Unpublish
                     else
                         form(method="POST", action=action)
                             input(type="hidden", name="id", value=item._id)
-                            input(type="hidden", name="published", value='true')
+                            input(type="hidden", name="published", value= item.published ? '' : 'true')
                             button(type="submit") Publish

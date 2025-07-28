@@ -16,6 +16,7 @@ div.container-content
           p Коментарів немає
       else
           each comment in comments
+            if comment.visible 
               p= comment.author.username
               p= comment.text
               hr

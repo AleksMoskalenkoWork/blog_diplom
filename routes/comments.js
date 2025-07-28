@@ -14,7 +14,7 @@ module.exports = function () {
       await Comment.insertOne({
         author,
         article: article._id,
-        text: he.encode(req.body.comment.trim()),
+        text: req.body.comment.trim(),
       });
 
       res.redirect('/');

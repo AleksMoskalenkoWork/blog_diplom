@@ -55,10 +55,12 @@ module.exports = function () {
   });
 
   router.post('/new', async (req, res) => {
+    console.log('Creating new article', req.body);
+
     try {
-      const title = he.encode(req.body.title.trim());
-      const url = he.encode(req.body.url.trim());
-      const content = he.encode(req.body.content.trim());
+      const title = req.body.title.trim();
+      const url = req.body.url.trim();
+      const content = req.body.content.trim();
       const author = req.session.userId;
 
       await Article.insertOne({
@@ -76,9 +78,9 @@ module.exports = function () {
 
   router.post('/:url/edit', async (req, res) => {
     try {
-      const title = he.encode(req.body.title.trim());
-      const url = he.encode(req.body.url.trim());
-      const content = he.encode(req.body.content.trim());
+      const title = req.body.title.trim();
+      const url = req.body.url.trim();
+      const content = req.body.content.trim();
       const author = req.session.userId;
 
       await Article.findOneAndUpdate(
