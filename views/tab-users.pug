@@ -1,0 +1,26 @@
+include dashboard
+
+div
+    h3 Users List
+        table
+            tr
+            th No.
+            th Username
+            th Email
+            th Admin
+            each item, index in users
+                tr
+                td #{index + 1}
+                td= item.username
+                td= item.email
+                td
+                    if item.isAdmin
+                        form(method="POST", action=action)
+                            input(type="hidden", name="id", value=item._id)
+                            input(type="hidden", name="isAdmin", value= item.isAdmin ? '' : 'true')
+                            button(type="submit")= item.isAdmin ? 'Admin' : 'User'
+                    else
+                        form(method="POST", action=action)
+                            input(type="hidden", name="id", value=item._id)
+                            input(type="hidden", name="isAdmin",value= item.isAdmin ? '' : 'true')
+                            button(type="submit")= item.isAdmin ? 'Admin' : 'User'   

@@ -3,37 +3,14 @@ include header
 div
     h1 Hi, #{username}
     h2 Dashboard
-    // add tabs users, articles, comments, settings
     ul
-      li: a(href="#users") Users
-      li: a(href="#articles") Articles
-      li: a(href="#comments") Comments
-      li: a(href="#settings") Settings
-      //on users tab show all users with username, email, password, role, createdAt
-    div#users
-      h3 Users List
-        table
-            tr
-            th No.
-            th Username
-            th Email
-            th Password
-            th Role
-            th Created At
-            each item, index in users
-                if item.username == username
-                    tr
-                    td #{index + 1}
-                    td= item.username
-                    td= item.email
-                    td= item.password
-                    td= item.role
-                    td= item.createdAt
-                else
-                    tr
-                    td #{index + 1}
-                    td= item.username
-                    td= item.email
-                    td= item.password
-                    td= item.role
-                    td= item.createdAt
+        li
+            a(href="/dashboard/users") Users
+        li
+            a(href="/dashboard/articles") Articles
+        li
+            a(href="/dashboard/comments") Comments
+
+
+
+

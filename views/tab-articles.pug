@@ -1,0 +1,28 @@
+include dashboard
+
+div
+    h3 Articles List
+    table
+        tr
+            th No.
+            th Title
+            th URL
+            th Content
+            th Published
+            each item, index in articles
+                tr
+                td #{index + 1}
+                td= item.title
+                td= item.url
+                td= item.content
+                td
+                    if item.published
+                        form(method="POST", action=action)
+                            input(type="hidden", name="id", value=item._id)
+                            input(type="hidden", name="published", value='false')
+                            button(type="submit") Unpublish
+                    else
+                        form(method="POST", action=action)
+                            input(type="hidden", name="id", value=item._id)
+                            input(type="hidden", name="published", value='true')
+                            button(type="submit") Publish

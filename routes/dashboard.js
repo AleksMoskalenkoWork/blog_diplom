@@ -1,16 +1,61 @@
 const express = require('express');
 const User = require('../schema/user');
+const Article = require('../schema/article');
+const Comment = require('../schema/comment');
 const router = express.Router();
 
 module.exports = function () {
   router.get('/dashboard', async (req, res) => {
-    // if (!req.session.user) return res.redirect("/login");
+    try {
+      res.redirect('/dashboard/users');
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
 
+  router.get('/dashboard/users', async (req, res) => {
     try {
       const users = await User.find();
-      res.render('dashboard', { users });
-    } catch (err) {
-      res.status(500).send('Помилка сервера');
+      res.render('tab-users', {
+        users,
+        action: '/update-user',
+      });
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  router.get('/dashboard/:tab-articles', async (req, res) => {
+    try {
+      const articles = await Article.find();
+      res.render('tab-articles', { articles });
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  router.get('/dashboard/:tab-comments', async (req, res) => {
+    try {
+      const comments = await Comment.find();
+      res.render('tab-comments', { comments });
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  router.post('/update-user', async (req, res) => {
+    try {
+      await User.findOneAndUpdate(
+        { _id: req.body.id },
+        {
+          $set: {
+            isAdmin: req.body.isAdmin === 'true' ? true : false,
+          },
+        }
+      );
+      res.redirect('/dashboard');
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
     }
   });
 

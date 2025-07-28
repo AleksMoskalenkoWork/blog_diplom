@@ -1,0 +1,16 @@
+include dashboard
+
+div
+    h3 Comments List
+    table
+        tr
+            th No.
+            th Article Title
+            th Comment
+            th User
+            each item, index in comments
+                tr
+                    td #{index + 1}
+                    td= item.articleTitle
+                    td= item.commentText
+                    td= item.username
