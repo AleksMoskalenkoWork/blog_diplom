@@ -17,7 +17,7 @@ module.exports = function () {
         text: he.encode(req.body.comment.trim()),
       });
 
-      res.redirect('/articles');
+      res.redirect('/');
     } catch (error) {
       res.status(500).send('Server error');
     }

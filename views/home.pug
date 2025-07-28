@@ -1,18 +1,21 @@
 include header
 
-div
+div.container-content
+    h1 Home
     if articles.length === 0
         p No articles found.
     else
         h3 Popular articles
     each article in articles
-        div
-           if article.author
-               p Author: #{article.author.username}
-           else
-               p Unknown author
-        h5
-            if email
-                a(href=`/articles/${article.url}`)= article.title
-            else
-                a(href=`/login`)= article.title
+        div.article-card
+            div 
+                if article.author
+                    p.author Author: #{article.author.username}
+                else
+                    p.author Unknown author
+            div 
+                h5
+                    if email
+                        a(href=`/articles/${article.url}`)= article.title
+                    else
+                        a(href=`/login`)= article.title

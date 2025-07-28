@@ -1,0 +1,271 @@
+/* Загальні стилі для контейнера */
+.container-content {
+  padding: 32px;
+}
+
+.dashboard_header {
+  padding: 32px 32px 0 32px;
+}
+
+.dashboard_content {
+  padding: 0 32px;
+}
+
+.dashboard_tabs {
+  margin: 0;
+}
+
+.dashboard_content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+  background: #fafbfc;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+}
+
+.dashboard_content th,
+.dashboard_content td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.dashboard_content th {
+  background: #f2f6fa;
+  color: #1a2a3a;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.dashboard_content tr:hover {
+  background: #f5f8fa;
+}
+
+.dashboard_content td {
+  color: #222;
+  font-size: 16px;
+}
+
+.dashboard_content button {
+  background: #0a5ca8;
+  color: #fff;
+  border: none;
+  width: fit-content;
+  border-radius: 4px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.dashboard_content button:hover {
+  background: #0074d9;
+}
+
+/* Заголовки */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: #1a2a3a;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-size: 32px;
+  border-bottom: 2px solid #e5e5e5;
+  padding-bottom: 8px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 18px;
+}
+
+h5 {
+  font-size: 16px;
+}
+
+/* Статті */
+.article-card {
+  margin: 32px 0;
+  padding: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #f9f9f9;
+  cursor: pointer;
+}
+
+.article-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.article-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.article-list > li {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.article-title {
+  font-size: 21px;
+  color: #0a5ca8;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.article-title:hover {
+  color: #0074d9;
+  text-decoration: underline;
+}
+
+.article-meta {
+  font-size: 15px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.article-content {
+  font-size: 16px;
+  color: #222;
+  margin-bottom: 12px;
+}
+
+/* Автор */
+.author {
+  font-style: italic;
+  color: #555;
+}
+
+/* Кнопки */
+button {
+  background: #0a5ca8;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #0074d9;
+}
+
+.button_delete {
+  background: #d9534f !important;
+  color: #fff;
+  margin-left: 24px !important;
+}
+
+/* Форми */
+form {
+  margin-top: 24px;
+  max-width: 250px;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='password'],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 14px;
+  border: 1px solid #cfd8dc;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: #f7f9fa;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Навігація */
+nav {
+  background: #f7f9fa;
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+nav a {
+  color: #0a5ca8;
+  text-decoration: none;
+  margin-right: 24px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: #0075d9;
+}
+
+/* Повідомлення та помилки */
+.message {
+  background: #e3f7e3;
+  color: #2e7d32;
+  padding: 12px 18px;
+  border-radius: 4px;
+  margin-bottom: 18px;
+}
+
+.error {
+  background: #ffeaea;
+  color: #c62828;
+  padding: 12px 18px;
+  border-radius: 4px;
+  margin-bottom: 18px;
+}
+
+/* Коментарі */
+.comments {
+  margin-top: 32px;
+}
+
+.comment {
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.comment-author {
+  color: #0a5ca8;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.comment-text {
+  color: #222;
+  margin-top: 4px;
+  font-size: 16px;
+}
+
+/* Footer
+footer {
+  margin-top: 48px;
+  padding: 16px 0;
+  text-align: center;
+  color: #888;
+  font-size: 0.95rem;
+  border-top: 1px solid #e5e5e5;
+} */

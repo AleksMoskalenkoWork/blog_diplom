@@ -1,16 +1,17 @@
 include header
 
-div
+div.container-content
     h1 My articles
     div
         a(href="/articles/new") Create new article
-    hr
+    
     div
         each article in articles
-            div
-                a(href=`/articles/${article.url}`)= article.title
-            div
-                a(href=`/articles/${article.url}/edit`) Edit
-            div
-                form(method="POST", action=`/articles/${article.url}/delete`, style="display:inline")
-                    button(type="submit") Delete
+            div.article-card
+                div
+                    a(href=`/articles/${article.url}`)= article.title
+                    hr
+                div
+                    a(href=`/articles/${article.url}/edit`) Edit
+                    form(method="POST", action=`/articles/${article.url}/delete`, style="display:inline")
+                        button.button_delete(type="submit") Delete
