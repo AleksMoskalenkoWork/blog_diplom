@@ -60,7 +60,7 @@ module.exports = function () {
       res.status(500).send('Internal Server Error');
     }
   });
-  // api
+
   router.post('/signin', async (req, res) => {
     try {
       const email = he.encode(req.body.email.trim().toLowerCase());

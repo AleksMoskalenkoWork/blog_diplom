@@ -26,15 +26,6 @@ module.exports = function () {
   });
 
   router.get('/:url', async (req, res) => {
-    // const article = await Article.findOne({ url: req.params.url }).populate(
-    //   'author'
-    // );
-
-    // const comments = await Comment.find({ article: article._id }).populate(
-    //   'author'
-    // );
-
-    // res.render('article', { article, comments });
     try {
       const article = await Article.findOne({ url: req.params.url }).populate(
         'author'
