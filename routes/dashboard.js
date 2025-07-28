@@ -25,7 +25,7 @@ module.exports = function () {
     }
   });
 
-  router.get('/dashboard/:tab-articles', async (req, res) => {
+  router.get('/dashboard/articles', async (req, res) => {
     try {
       const articles = await Article.find();
       res.render('tab-articles', { articles });
@@ -34,7 +34,7 @@ module.exports = function () {
     }
   });
 
-  router.get('/dashboard/:tab-comments', async (req, res) => {
+  router.get('/dashboard/comments', async (req, res) => {
     try {
       const comments = await Comment.find();
       res.render('tab-comments', { comments });
