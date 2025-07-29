@@ -76,8 +76,6 @@ module.exports = function () {
   });
 
   router.post('/update-comment', async (req, res) => {
-    console.log('Update Comment:', req.body);
-
     try {
       await Comment.findOneAndUpdate(
         { _id: req.body.id },

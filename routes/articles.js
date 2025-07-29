@@ -55,8 +55,6 @@ module.exports = function () {
   });
 
   router.post('/new', async (req, res) => {
-    console.log('Creating new article', req.body);
-
     try {
       const title = req.body.title.trim();
       const url = req.body.url.trim();
