@@ -21,6 +21,8 @@ div.container-content
               p= comment.text
               hr
     div
+      if error
+            p(style="color:red")= error
       form(method="POST", action=`/${article.url}/comments`)
         div
           textarea(name="comment", placeholder="Comment")
