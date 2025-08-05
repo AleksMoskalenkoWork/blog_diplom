@@ -61,6 +61,13 @@ module.exports = function () {
       const content = req.body.content.trim();
       const author = req.session.userId;
 
+      if (!title || !url || !content) {
+        return res.render('article-form', {
+          article: { title, url, content },
+          error: 'All fields are required.',
+        });
+      }
+
       await Article.insertOne({
         author,
         title,

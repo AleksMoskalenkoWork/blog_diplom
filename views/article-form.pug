@@ -1,18 +1,20 @@
 include header
 
 div.container-content
-  h1= article._id ? 'Edit article' : 'New article'
+    h1= article._id ? 'Edit article' : 'New article'
+    if error
+        p(style="color:red")= error
 
-  form(method="POST", action=action)
-    div
-        input(type="text", name="title", placeholder="Title", value=article.title || '')
-    div
-        input(type="text", name="url", placeholder="URL", value=article.url || '')
-    div
-        textarea(name="content" placeholder="Content")= article.content || ''
-    div
-        label
-            input(type="checkbox", name="published", checked= article.published ? 'checked' : '')
-            |   Public
-    div
-        button(type="submit") Save
+    form(method="POST", action=action)
+        div
+            input(type="text", name="title", placeholder="Title", value=article.title || '')
+        div
+            input(type="text", name="url", placeholder="URL", value=article.url || '')
+        div
+            textarea(name="content" placeholder="Content")= article.content || ''
+        div
+            label
+                input(type="checkbox", name="published", checked= article.published ? 'checked' : '')
+                |   Public
+        div
+            button(type="submit") Save
