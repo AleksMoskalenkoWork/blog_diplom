@@ -23,9 +23,9 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  app.locals.username = req.session?.username || null;
-  app.locals.email = req.session?.email || null;
-  app.locals.isAdmin = req.session?.isAdmin || null;
+  res.locals.username = req.session?.username || null;
+  res.locals.email = req.session?.email || null;
+  res.locals.isAdmin = req.session?.isAdmin || null;
   next();
 });
 
